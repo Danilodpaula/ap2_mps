@@ -1,0 +1,83 @@
+{
+  "users": [
+    {
+      "id": "ce3d",
+      "username": "knsks"
+    },
+    {
+      "id": "0290",
+      "username": "danilo silva"
+    },
+    {
+      "id": "d08f",
+      "username": "danilo"
+    },
+    {
+      "id": "ff04",
+      "username": "danilooo"
+    }
+  ],
+  "posts": [
+    {
+      "id": "b8bf",
+      "userId": "ce3d",
+      "content": "kksnksnks",
+      "createdAt": 1750016062301
+    },
+    {
+      "id": "0f5d",
+      "userId": "ce3d",
+      "content": "o ikeda é iuuuuito engrazado\n",
+      "createdAt": 1750016072263
+    },
+    {
+      "id": "156e",
+      "userId": "ce3d",
+      "content": "vcs n acham?\n",
+      "createdAt": 1750016077923
+    },
+    {
+      "id": "0b1c",
+      "userId": "0290",
+      "content": "to pensando em fudeeeer",
+      "createdAt": 1750016413058
+    },
+    {
+      "id": "461c",
+      "userId": "d08f",
+      "content": "ele querr fuderr",
+      "createdAt": 1750016486071
+    }
+  ],
+  "likes": [
+    {
+      "id": "f53c",
+      "postId": "0b1c",
+      "userId": "0290"
+    }
+  ],
+  "comments": [
+    {
+      "id": "4496",
+      "postId": "0b1c",
+      "userId": "0290",
+      "text": "eitchaaaaaa",
+      "createdAt": 1750016419611
+    },
+    {
+      "id": "b3e7",
+      "postId": "0b1c",
+      "userId": "0290",
+      "text": "e ai alguem pra fuder cmg?",
+      "createdAt": 1750016433200
+    },
+    {
+      "id": "c0b0",
+      "postId": "0b1c",
+      "userId": "0290",
+      "text": "ein ein",
+      "createdAt": 1750016436861
+    }
+  ],
+  "retweets": []
+}
