@@ -140,6 +140,28 @@ footer button.retweeted:hover {
 
 .comments li strong { color: var(--primary); }
 
+article header button,
+.comments li button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+article header button:hover,
+.comments li button:hover {
+  color: var(--like);   /* ou var(--primary) */
+}
+
+.subcomments {
+  margin-top: .35rem;
+  padding-left: 1rem;
+  border-left: 1px dashed var(--border);
+  font-size: .85rem;
+}
+
+
+
 /* ─────────── Login (reaproveita estilo) ─────────── */
 .centered-box {
   max-width: 360px;

@@ -8,6 +8,7 @@ export interface User {
     userId: number;
     content: string;
     createdAt: number;
+    imageUrl?: string;
     likes?: Like[];
     comments?: Comment[];
     retweets?: Retweet[];
