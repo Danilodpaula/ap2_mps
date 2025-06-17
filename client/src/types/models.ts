@@ -17,6 +17,25 @@ export interface User {
   }
   
   export interface Like     { id: number; postId: number; userId: number; }
-  export interface Comment  { id: number; postId: number; userId: number; text: string; createdAt: number; }
+  export interface Comment  { 
+    id: number; 
+    postId: number; 
+    userId: number; 
+    text: string; 
+    createdAt: number;
+    mediaUrl?: string;  
+    mediaType?: 'image' | 'video';
+  }
+
+  export interface SubComment  { 
+    id: number; 
+    postId: number; 
+    userId: number; 
+    text: string; 
+    createdAt: number;
+    mediaUrl?: string;   
+    mediaType?: 'image' | 'video'; 
+  }
+
   export interface Retweet  { id: number; postId: number; userId: number; createdAt: number; }
   

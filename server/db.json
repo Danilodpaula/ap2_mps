@@ -1,375 +1,44 @@
 {
   "users": [
     {
-      "username": "sosnos",
+      "username": "klmçm",
       "id": 1
     },
     {
-      "username": "pinto cu bosta",
+      "username": "123",
       "id": 2
     },
     {
-      "username": "Jsjwbfkdk",
+      "username": "w",
       "id": 3
     },
     {
-      "username": "Ajsjshd",
+      "username": "anon",
       "id": 4
-    },
-    {
-      "username": "Danilo Silva de Paula",
-      "id": 5
-    },
-    {
-      "username": "keda",
-      "id": 6
-    },
-    {
-      "username": "SKMSKS",
-      "id": 7
-    },
-    {
-      "username": "Ccvbj",
-      "id": 8
-    },
-    {
-      "username": "Homem do saco",
-      "id": 9
-    },
-    {
-      "username": "Jv eh viadinho",
-      "id": 10
-    },
-    {
-      "username": "juca",
-      "id": 11
     }
   ],
   "posts": [
     {
-      "userId": 1,
-      "content": "",
-      "mediaUrl": "/uploads/media-1750121834274-301014952.mp4",
-      "mediaType": "video",
-      "createdAt": 1750121835643,
-      "id": 2
-    },
-    {
-      "userId": 1,
-      "content": "carvalho viado viadinho",
-      "createdAt": 1750121930798,
-      "id": 3
-    },
-    {
       "userId": 2,
-      "content": "",
-      "mediaUrl": "/uploads/media-1750121967441-17285450.png",
-      "mediaType": "image",
-      "createdAt": 1750121968358,
-      "id": 4
-    },
-    {
-      "userId": 4,
-      "content": "Danilo pussy",
-      "createdAt": 1750122027571,
-      "id": 5
-    },
-    {
-      "userId": 3,
-      "content": "Danilo é tão ruizinho",
-      "createdAt": 1750122083396,
-      "id": 6
-    },
-    {
-      "userId": 6,
-      "content": "kalinka é my edgy",
-      "createdAt": 1750122098644,
-      "id": 7
-    },
-    {
-      "userId": 6,
-      "content": "",
-      "mediaUrl": "/uploads/media-1750122140777-988828712.jpg",
-      "mediaType": "image",
-      "createdAt": 1750122141028,
-      "id": 8
-    },
-    {
-      "userId": 10,
-      "content": "Mapa de calor do Danilo já Jv obs: ele tá do lado direito",
-      "mediaUrl": "/uploads/media-1750122533340-859623627.jpeg",
-      "mediaType": "image",
-      "createdAt": 1750122533418,
-      "id": 9
-    },
-    {
-      "userId": 10,
-      "content": "Eu olhando pro Hugo",
-      "mediaUrl": "/uploads/media-1750122591734-212413509.jpeg",
-      "mediaType": "image",
-      "createdAt": 1750122591890,
-      "id": 11
-    },
-    {
-      "userId": 10,
-      "content": "Pode pornografia nesse site?",
-      "createdAt": 1750122630905,
-      "id": 12
-    },
-    {
-      "userId": 10,
-      "content": "Eu quando sou invadido na JG",
-      "mediaUrl": "/uploads/media-1750122667395-166616961.jpeg",
-      "mediaType": "image",
-      "createdAt": 1750122668386,
-      "id": 13
-    },
-    {
-      "userId": 10,
-      "content": "Eu quando sou invadido na JG",
-      "mediaUrl": "/uploads/media-1750122668851-746406989.jpeg",
-      "mediaType": "image",
-      "createdAt": 1750122669412,
-      "id": 14
-    },
-    {
-      "userId": 10,
-      "content": "Isso aqui eh melhor q tt",
-      "createdAt": 1750122686031,
-      "id": 15
-    },
-    {
-      "userId": 10,
-      "content": "Hj amassei na aula de solda fiquei soldando só dando",
-      "createdAt": 1750122700696,
-      "id": 16
-    }
-  ],
-  "likes": [
-    {
-      "postId": 2,
-      "userId": 1,
+      "content": "knklnkl",
+      "createdAt": 1750189319764,
       "id": 1
-    },
-    {
-      "postId": 4,
-      "userId": 1,
-      "id": 2
-    },
-    {
-      "postId": 3,
-      "userId": 4,
-      "id": 3
-    },
-    {
-      "postId": 7,
-      "userId": 1,
-      "id": 4
-    },
-    {
-      "postId": 14,
-      "userId": 7,
-      "id": 5
-    },
-    {
-      "postId": 13,
-      "userId": 7,
-      "id": 6
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "id": 7
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "id": 8
     }
   ],
+  "likes": [],
   "comments": [
     {
-      "postId": 4,
-      "userId": 1,
-      "text": "q horror",
-      "createdAt": 1750121980415,
+      "postId": 1,
+      "userId": 2,
+      "text": "lçmlçmlç",
+      "createdAt": 1750189326676,
       "id": 1
-    },
-    {
-      "postId": 7,
-      "userId": 1,
-      "text": "kalinka edge >>>> juca edge",
-      "createdAt": 1750122120364,
-      "id": 2
-    },
-    {
-      "postId": 9,
-      "userId": 10,
-      "text": "Na jungle*",
-      "createdAt": 1750122553612,
-      "id": 3
-    },
-    {
-      "postId": 9,
-      "userId": 7,
-      "text": "que especifico",
-      "createdAt": 1750122558251,
-      "id": 4
-    },
-    {
-      "postId": 9,
-      "userId": 6,
-      "text": "apaga q odior",
-      "createdAt": 1750122584093,
-      "id": 5
-    },
-    {
-      "postId": 11,
-      "userId": 7,
-      "text": "gordinho faz de proposito",
-      "createdAt": 1750122620915,
-      "id": 6
-    },
-    {
-      "postId": 8,
-      "userId": 7,
-      "text": "fofo, deve tá bem friozinho em bolotas",
-      "createdAt": 1750122657439,
-      "id": 7
-    },
-    {
-      "postId": 12,
-      "userId": 7,
-      "text": "vai ser banido, só vai leva rmaais tempo que o nomral",
-      "createdAt": 1750122675781,
-      "id": 8
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "text": "n tem moderação, tá podendo tudo aí ",
-      "createdAt": 1750122690803,
-      "id": 9
     }
   ],
-  "commentLikes": [
-    {
-      "commentId": 9,
-      "userId": 9,
-      "id": 1
-    },
-    {
-      "commentId": 8,
-      "userId": 9,
-      "id": 2
-    },
-    {
-      "commentId": 9,
-      "userId": 9,
-      "id": 3
-    }
-  ],
-  "commentRetweets": [
-    {
-      "commentId": 8,
-      "userId": 9,
-      "createdAt": 1750122721468,
-      "id": 1
-    },
-    {
-      "commentId": 8,
-      "userId": 9,
-      "createdAt": 1750122728665,
-      "id": 2
-    }
-  ],
+  "commentLikes": [],
+  "commentRetweets": [],
   "subComments": [],
   "subCommentLikes": [],
   "subCommentRetweets": [],
-  "retweets": [
-    {
-      "postId": 2,
-      "userId": 1,
-      "createdAt": 1750121939552,
-      "id": 1
-    },
-    {
-      "postId": 2,
-      "userId": 1,
-      "createdAt": 1750121940118,
-      "id": 2
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122729651,
-      "id": 3
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122730515,
-      "id": 4
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122738249,
-      "id": 5
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122739255,
-      "id": 6
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122739888,
-      "id": 7
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122740469,
-      "id": 8
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122740925,
-      "id": 9
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122741400,
-      "id": 10
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122741900,
-      "id": 11
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122742471,
-      "id": 12
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122742939,
-      "id": 13
-    },
-    {
-      "postId": 12,
-      "userId": 9,
-      "createdAt": 1750122743475,
-      "id": 14
-    }
-  ]
+  "retweets": []
 }

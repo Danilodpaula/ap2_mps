@@ -48,7 +48,7 @@ export const uploadMedia = async (file: File) => {
 export const publish = (
   userId: string | number,
   content: string,
-  media?: { url: string; type: 'image' | 'video' }
+  media?: { url: string; type: "image" | "video" }
 ) =>
   api.post("/posts", {
     userId,
@@ -64,18 +64,32 @@ export const unlike = (id: string | number) => api.delete(`/likes/${id}`);
 export const retweet = (postId: string | number, userId: string | number) =>
   api.post("/retweets", { postId, userId, createdAt: Date.now() });
 
+export const editPost = (postId: number, newContent: string) =>
+  api.patch(`/posts/${postId}`, { content: newContent });
+
 export const deletePost = (id: string | number) => api.delete(`/posts/${id}`);
 
 /* ─────────── Comentários ─────────── */
 export const comment = (
   postId: string | number,
   userId: string | number,
-  text: string
+  text: string,
+  media?: { url: string; type: "image" | "video" }
 ) =>
-  api.post("/comments", { postId, userId, text, createdAt: Date.now() });
+  api.post("/comments", {
+    postId,
+    userId,
+    text,
+    createdAt: Date.now(),
+    mediaUrl: media?.url,
+    mediaType: media?.type,
+  });
 
 export const deleteComment = (id: string | number) =>
   api.delete(`/comments/${id}`);
+
+export const editComment = (commentId: number, newText: string) =>
+  api.patch(`/comments/${commentId}`, { text: newText });
 
 export const likeComment = (
   commentId: string | number,
@@ -86,9 +100,16 @@ export const unlikeComment = (id: string | number) =>
 
 export const retweetComment = (
   commentId: string | number,
-  userId: string | number
+  userId: string | number,
+  media?: { url: string; type: "image" | "video" }
 ) =>
-  api.post("/commentRetweets", { commentId, userId, createdAt: Date.now() });
+  api.post("/commentRetweets", {
+    commentId,
+    userId,
+    createdAt: Date.now(),
+    mediaUrl: media?.url,
+    mediaType: media?.type,
+  });
 
 /* ─────────── Sub-Comentários ─────────── */
 export const replyComment = (
@@ -102,6 +123,9 @@ export const replyComment = (
     text,
     createdAt: Date.now(),
   });
+
+export const deleteSubComment = (id: number) =>
+  api.delete(`/subComments/${id}`);
 
 export const likeSubComment = (
   subId: string | number,
