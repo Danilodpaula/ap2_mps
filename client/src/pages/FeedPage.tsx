@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   fetchPosts,
   publish,
+  uploadMedia, // Importe a nova função
   like,
   unlike,
   comment,
@@ -25,8 +26,9 @@ const FeedPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [text, setText] = useState("");
+  const [mediaFile, setMediaFile] = useState<File | null>(null); // Alterado de 'image' para 'mediaFile'
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /* ---------- helpers ---------- */
   const formatDate = (t: number) =>
     new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
@@ -38,11 +40,8 @@ const FeedPage = () => {
   const usernameById = (id: string | number) =>
     users.find((u) => u.id === id)?.username || "(desconhecido)";
 
-  /* ---------- carregar feed ---------- */
   const refresh = async () => {
     const { posts, users, subComments } = await fetchPosts();
-
-    // anexa subComments ao comentário correspondente
     posts.forEach((p: any) =>
       p.comments?.forEach((c: any) => {
         c.subComments = subComments.filter(
@@ -50,25 +49,52 @@ const FeedPage = () => {
         );
       })
     );
-
     setPosts(posts);
     setUsers(users);
   };
+
   useEffect(() => {
     refresh();
     const id = setInterval(refresh, 5000);
     return () => clearInterval(id);
   }, []);
 
-  /* ---------- publicar ---------- */
-  const handlePublish = async () => {
-    if (!text.trim() || !user) return;
-    await publish(user.id, text.trim());
-    setText("");
-    refresh();
+  const handleClearMedia = () => {
+    setMediaFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
-  /* ---------- like / deslike em post ---------- */
+  const handlePublish = async () => {
+    if (!user) return;
+    if (!text.trim() && !mediaFile) return;
+
+    try {
+      if (mediaFile) {
+        // 1. Fazer upload do arquivo primeiro
+        const { mediaUrl } = await uploadMedia(mediaFile);
+        const mediaType = mediaFile.type.startsWith("image/")
+          ? "image"
+          : "video";
+
+        // 2. Publicar o post com a URL retornada
+        await publish(user.id, text.trim(), { url: mediaUrl, type: mediaType });
+      } else {
+        // Publicar apenas o texto
+        await publish(user.id, text.trim());
+      }
+
+      // Limpar campos e atualizar feed
+      setText("");
+      handleClearMedia();
+      refresh();
+    } catch (error) {
+      console.error("Falha ao publicar:", error);
+      alert("Não foi possível fazer a publicação.");
+    }
+  };
+
   const toggleLike = async (p: Post) => {
     if (!user) return;
     const existing = p.likes?.find((l: Like) => l.userId === user.id);
@@ -76,43 +102,57 @@ const FeedPage = () => {
     refresh();
   };
 
-  /* ---------- helpers de comentário ---------- */
   const likesOf = (c: any) => (c.commentLikes ?? []).length;
   const userLiked = (c: any) =>
     (c.commentLikes ?? []).some((l: any) => l.userId === user?.id);
-
   const rtsOf = (c: any) => (c.commentRetweets ?? []).length;
   const userRt = (c: any) =>
     (c.commentRetweets ?? []).some((r: any) => r.userId === user?.id);
-
-  /* ---------- helpers de subComentário ---------- */
   const subLikes = (sc: any) => (sc.subCommentLikes ?? []).length;
   const subUserLiked = (sc: any) =>
     (sc.subCommentLikes ?? []).some((l: any) => l.userId === user?.id);
-
   const subRts = (sc: any) => (sc.subCommentRetweets ?? []).length;
   const subUserRt = (sc: any) =>
     (sc.subCommentRetweets ?? []).some((r: any) => r.userId === user?.id);
 
-  /* ---------- render ---------- */
+  // Helper para construir a URL completa da mídia
+  // const getMediaFullUrl = (mediaUrl: string) =>
+  //   `${import.meta.env.VITE_API_URL}${mediaUrl}`;
+
   return (
     <div className="feed" style={{ marginTop: "2rem" }}>
-      {/* Caixa de publicação */}
       <section className="publish-box">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="No que você está pensando?"
         />
-        <button onClick={handlePublish}>Publicar</button>
+        <input
+          type="file"
+          accept="image/*,video/*" // Aceitar imagens e vídeos
+          ref={fileInputRef}
+          onChange={(e) =>
+            setMediaFile(e.target.files ? e.target.files[0] : null)
+          }
+        />
+        {mediaFile && (
+          <button
+            type="button"
+            onClick={handleClearMedia}
+            style={{ marginTop: "10px" }}
+          >
+            Limpar Mídia
+          </button>
+        )}
+        <button disabled={!text.trim() && !mediaFile} onClick={handlePublish}>
+          Publicar
+        </button>
       </section>
 
-      {/* Timeline */}
       {posts
         .sort((a, b) => b.createdAt - a.createdAt)
         .map((p) => (
           <article key={p.id}>
-            {/* Cabeçalho do post */}
             <header
               style={{
                 display: "flex",
@@ -126,8 +166,6 @@ const FeedPage = () => {
                   · {formatDate(p.createdAt)}
                 </time>
               </span>
-
-              {/* Excluir post */}
               {p.userId === user?.id && (
                 <button
                   onClick={() =>
@@ -149,7 +187,23 @@ const FeedPage = () => {
 
             <p>{p.content}</p>
 
-            {/* Ações do post */}
+            {/* Lógica de renderização de mídia */}
+            {/* Lógica de renderização de mídia */}
+            {p.mediaUrl && p.mediaType === "image" && (
+              <img
+                src={p.mediaUrl}
+                alt="Post media"
+                style={{ maxWidth: "100%", borderRadius: "8px" }}
+              />
+            )}
+            {p.mediaUrl && p.mediaType === "video" && (
+              <video
+                src={p.mediaUrl}
+                controls
+                style={{ maxWidth: "100%", borderRadius: "8px" }}
+              />
+            )}
+
             <footer>
               <button
                 className={
@@ -160,7 +214,6 @@ const FeedPage = () => {
                 {p.likes?.some((l) => l.userId === user?.id) ? "♥" : "♡"}{" "}
                 {p.likes?.length || 0}
               </button>
-
               <button
                 className={
                   p.retweets?.some((r) => r.userId === user?.id)
@@ -171,7 +224,6 @@ const FeedPage = () => {
               >
                 🔁 {p.retweets?.length || 0}
               </button>
-
               <button
                 onClick={() => {
                   const txt = prompt("Comentário:");
@@ -182,7 +234,7 @@ const FeedPage = () => {
               </button>
             </footer>
 
-            {/* Comentários */}
+            {/* ... (o restante do código dos comentários permanece o mesmo) ... */}
             {p.comments?.length ? (
               <ul className="comments">
                 {p.comments.map((c: any) => (
@@ -190,7 +242,6 @@ const FeedPage = () => {
                     key={c.id}
                     style={{ display: "flex", flexDirection: "column", gap: 4 }}
                   >
-                    {/* texto do comentário */}
                     <div
                       style={{
                         display: "flex",
@@ -204,7 +255,6 @@ const FeedPage = () => {
                           · {formatDate(c.createdAt)}
                         </time>
                       </span>
-
                       {c.userId === user?.id && (
                         <button
                           onClick={() =>
@@ -222,8 +272,6 @@ const FeedPage = () => {
                         </button>
                       )}
                     </div>
-
-                    {/* ações do comentário */}
                     <div style={{ display: "flex", gap: "1.4rem" }}>
                       <button
                         className={userLiked(c) ? "liked" : ""}
@@ -232,14 +280,13 @@ const FeedPage = () => {
                             ? unlikeComment(
                                 (c.commentLikes ?? []).find(
                                   (l: any) => l.userId === user?.id
-                                ).id
+                                )!.id
                               ).then(refresh)
                             : likeComment(c.id, user!.id).then(refresh)
                         }
                       >
                         {userLiked(c) ? "♥" : "♡"} {likesOf(c)}
                       </button>
-
                       <button
                         className={userRt(c) ? "retweeted" : ""}
                         onClick={() =>
@@ -248,7 +295,6 @@ const FeedPage = () => {
                       >
                         🔁 {rtsOf(c)}
                       </button>
-
                       <button
                         onClick={() => {
                           const reply = prompt("Responder comentário:");
@@ -259,8 +305,6 @@ const FeedPage = () => {
                         💬 {c.subComments?.length || 0}
                       </button>
                     </div>
-
-                    {/* subcomentários */}
                     {c.subComments?.length ? (
                       <ul className="subcomments">
                         {c.subComments.map((sc: any) => (
@@ -275,14 +319,11 @@ const FeedPage = () => {
                               <span>
                                 <strong>@{usernameById(sc.userId)}</strong>:{" "}
                                 {sc.text}{" "}
-                                <time
-                                  style={{ color: "var(--text-muted)" }}
-                                >
+                                <time style={{ color: "var(--text-muted)" }}>
                                   · {formatDate(sc.createdAt)}
                                 </time>
                               </span>
                             </div>
-
                             <div
                               style={{
                                 display: "flex",
@@ -296,26 +337,22 @@ const FeedPage = () => {
                                   subUserLiked(sc)
                                     ? unlikeSubComment(
                                         (sc.subCommentLikes ?? []).find(
-                                          (l: any) =>
-                                            l.userId === user?.id
-                                        ).id
+                                          (l: any) => l.userId === user?.id
+                                        )!.id
                                       ).then(refresh)
-                                    : likeSubComment(
-                                        sc.id,
-                                        user!.id
-                                      ).then(refresh)
+                                    : likeSubComment(sc.id, user!.id).then(
+                                        refresh
+                                      )
                                 }
                               >
                                 {subUserLiked(sc) ? "♥" : "♡"} {subLikes(sc)}
                               </button>
-
                               <button
                                 className={subUserRt(sc) ? "retweeted" : ""}
                                 onClick={() =>
-                                  retweetSubComment(
-                                    sc.id,
-                                    user!.id
-                                  ).then(refresh)
+                                  retweetSubComment(sc.id, user!.id).then(
+                                    refresh
+                                  )
                                 }
                               >
                                 🔁 {subRts(sc)}

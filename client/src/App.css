@@ -68,7 +68,10 @@ body {
   cursor: pointer;
   transition: background 120ms;
 }
+
 .publish-box button:hover { background: var(--primary-hover); }
+
+.publish-box button:disabled { opacity: 0.4; cursor: not-allowed;}
 
 /* ─────────── Postagem ─────────── */
 article {

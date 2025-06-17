@@ -2,7 +2,7 @@ import axios from "axios";
 
 /* ─────────── instância base ─────────── */
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "", // "" = mesma origem
+  baseURL: "/api", // A única linha modificada
 });
 
 /* ─────────── Auth / Usuários ─────────── */
@@ -30,10 +30,33 @@ export const fetchPosts = async () => {
   return { posts, users, subComments };
 };
 
-/* ─────────── Publicações ─────────── */
-export const publish = (userId: string | number, content: string, imageUrl?: string) =>
-  api.post("/posts", { userId, content, imageUrl, createdAt: Date.now() });
+// Nova função para fazer upload do arquivo e obter a URL
+export const uploadMedia = async (file: File) => {
+  const formData = new FormData();
+  formData.append("media", file); // 'media' deve ser o mesmo nome usado no upload.single('media') do servidor
 
+  const { data } = await api.post("/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return data; // Retorna { mediaUrl: '/uploads/arquivo-123.png' }
+};
+
+/* ─────────── Publicações ─────────── */
+// Função 'publish' modificada
+export const publish = (
+  userId: string | number,
+  content: string,
+  media?: { url: string; type: 'image' | 'video' }
+) =>
+  api.post("/posts", {
+    userId,
+    content,
+    mediaUrl: media?.url,
+    mediaType: media?.type,
+    createdAt: Date.now(),
+  });
 export const like = (postId: string | number, userId: string | number) =>
   api.post("/likes", { postId, userId });
 export const unlike = (id: string | number) => api.delete(`/likes/${id}`);

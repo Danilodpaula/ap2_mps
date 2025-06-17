@@ -8,11 +8,12 @@ export interface User {
     userId: number;
     content: string;
     createdAt: number;
-    imageUrl?: string;
+    mediaUrl?: string; // Adicione esta
+    mediaType?: 'image' | 'video'; // E esta
     likes?: Like[];
     comments?: Comment[];
     retweets?: Retweet[];
-    user?: User;            // via ?_expand=user
+    user?: User;
   }
   
   export interface Like     { id: number; postId: number; userId: number; }
