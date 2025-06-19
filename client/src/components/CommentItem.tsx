@@ -98,33 +98,28 @@ export const CommentItem = ({ c, usernameById, formatDate, refresh }: CommentIte
               </div>
             )}
           </div>
-          {c.mediaUrl &&
-            (() => {
-              const mediaSrc = import.meta.env.PROD
-                ? `<span class="math-inline">\{import\.meta\.env\.VITE\_API\_URL\}</span>{c.mediaUrl}`
-                : c.mediaUrl;
-              return c.mediaType === "image" ? (
-                <img
-                  src={mediaSrc}
-                  alt="Comment media"
-                  style={{
-                    maxWidth: "300px",
-                    borderRadius: "8px",
-                    marginTop: "5px",
-                  }}
-                />
-              ) : (
-                <video
-                  src={mediaSrc}
-                  controls
-                  style={{
-                    maxWidth: "300px",
-                    borderRadius: "8px",
-                    marginTop: "5px",
-                  }}
-                />
-              );
-            })()}
+          {c.mediaUrl && c.mediaType === "image" && (
+            <img
+              src={c.mediaUrl}
+              alt="Comment media"
+              style={{
+                maxWidth: "300px",
+                borderRadius: "8px",
+                marginTop: "5px",
+              }}
+            />
+          )}
+          {c.mediaUrl && c.mediaType === "video" && (
+            <video
+              src={c.mediaUrl}
+              controls
+              style={{
+                maxWidth: "300px",
+                borderRadius: "8px",
+                marginTop: "5px",
+              }}
+            />
+          )}
           <div style={{ display: "flex", gap: "1.4rem" }}>
             <button
               className={userLiked(c) ? "liked" : ""}
