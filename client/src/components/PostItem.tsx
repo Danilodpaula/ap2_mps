@@ -1,7 +1,7 @@
 // src/components/PostItem.tsx
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import type { Post, User } from "../types/models";
+import type { Post } from "../types/models";
 import {
   editPost,
   deletePost,
@@ -16,7 +16,6 @@ import { PublishBox } from "./PublishBox"; // Importe o novo componente reutiliz
 
 type PostItemProps = {
   p: Post;
-  users: User[];
   usernameById: (id: number) => string;
   formatDate: (t: number) => string;
   refresh: () => void;
