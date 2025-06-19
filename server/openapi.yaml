@@ -5,8 +5,8 @@ info:
   version: "1.0.0"
 
 servers:
-  - url: http://localhost:3001
-    description: Servidor de desenvolvimento local
+  - url: /api
+    description: Caminho base da API neste servidor
 
 tags:
   - name: Usuários & Autenticação

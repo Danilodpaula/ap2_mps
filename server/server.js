@@ -45,7 +45,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // --- Configuração do JSON Server (rotas da API) ---
 const router = jsonServer.router("server/db.json");
 app.use(jsonServer.defaults()); 
-app.use(router); // Importante: Deixe as rotas da API por último
+app.use('/api', router); // Importante: Deixe as rotas da API por último
 
 // Iniciar o servidor
 app.listen(port, () => {
