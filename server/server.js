@@ -3,52 +3,52 @@ const multer = require("multer");
 const path = require("path");
 const jsonServer = require("json-server");
 const cors = require("cors");
-
-// NOVAS IMPORTAÇÕES PARA O SWAGGER
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001; // Usar a porta do Render ou 3001 localmente
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
-// --- Rota de Upload (permanece igual) ---
+// --- ROTAS DA API ---
+// Upload
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "server/public/uploads/");
-  },
+  destination: (req, file, cb) => cb(null, "server/public/uploads/"),
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
+    cb(null, path.basename(file.originalname, path.extname(file.originalname)) + "-" + uniqueSuffix + path.extname(file.originalname));
   },
 });
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("media"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("Nenhum arquivo enviado.");
-  }
-  res.status(200).json({
-    mediaUrl: `/${req.file.path.replace(/\\/g, "/").replace("server/public/", "")}`,
-  });
+  if (!req.file) return res.status(400).send("Nenhum arquivo enviado.");
+  res.status(200).json({ mediaUrl: `/uploads/${path.basename(req.file.path)}` });
 });
 
-// --- Rota da Documentação da API ---
-// Carrega o arquivo YAML
+// Documentação
 const swaggerDocument = YAML.load('./server/openapi.yaml');
-// Cria a rota /docs que servirá a interface do Swagger
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// --- Configuração do JSON Server (rotas da API) ---
+// Rotas do JSON Server
 const router = jsonServer.router("server/db.json");
-app.use(jsonServer.defaults()); 
-app.use('/api', router); // Importante: Deixe as rotas da API por último
+app.use('/api', router); // Todas as rotas (posts, users, etc.) ficam em /api
+
+// --- SERVIR O FRONTEND EM PRODUÇÃO ---
+// Servir a pasta de uploads e a pasta de build do cliente
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
+
+// Rota "Catch-All": Para qualquer outra requisição, serve o index.html do frontend
+// Isso é CRUCIAL para o React Router funcionar corretamente.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+});
+
 
 // Iniciar o servidor
 app.listen(port, () => {
-  console.log(`🚀 Servidor customizado rodando em http://localhost:${port}`);
-  console.log(`📚 Documentação da API disponível em http://localhost:${port}/docs`);
+  console.log(`🚀 Servidor rodando na porta ${port}`);
 });
