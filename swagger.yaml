@@ -1,0 +1,361 @@
+openapi: 3.0.0
+info:
+  title: API da Rede Social
+  description: API para a rede social de posts, comentários e interações.
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:3001
+    description: Servidor de desenvolvimento local
+
+tags:
+  - name: Usuários & Autenticação
+    description: Operações relacionadas a usuários e login.
+  - name: Mídia
+    description: Upload de imagens e vídeos.
+  - name: Posts
+    description: Criação, leitura, edição e exclusão de posts.
+  - name: Comentários
+    description: Operações relacionadas a comentários em posts.
+  - name: Sub-Comentários
+    description: Respostas aos comentários (replies).
+  - name: Interações
+    description: Endpoints para curtir e retweetar conteúdo.
+
+paths:
+  # -------------------------
+  # Usuários & Autenticação
+  # -------------------------
+  /users:
+    post:
+      tags: [Usuários & Autenticação]
+      summary: Cria ou loga um usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: { username: { type: string, example: "danilo" } }
+      responses:
+        '201':
+          description: Usuário criado ou logado.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/User' } }
+
+  # -------------------------
+  # Mídia
+  # -------------------------
+  /upload:
+    post:
+      tags: [Mídia]
+      summary: Upload de um arquivo de mídia
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties: { media: { type: string, format: binary } }
+      responses:
+        '200':
+          description: Mídia enviada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mediaUrl: { type: string, example: "/uploads/media-1672531200000-123456789.png" }
+
+  # -------------------------
+  # Posts
+  # -------------------------
+  /posts:
+    get:
+      tags: [Posts]
+      summary: Lista todos os posts
+      responses:
+        '200':
+          description: Lista de posts.
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: '#/components/schemas/Post' } }
+    post:
+      tags: [Posts]
+      summary: Cria um novo post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NewPost' }
+      responses:
+        '201':
+          description: Post criado.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/Post' } }
+
+  /posts/{id}:
+    patch:
+      tags: [Posts]
+      summary: Edita um post existente
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: { content: { type: string } }
+      responses:
+        '200':
+          description: Post atualizado.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/Post' } }
+    delete:
+      tags: [Posts]
+      summary: Deleta um post
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses:
+        '204':
+          description: Post deletado com sucesso.
+
+  # -------------------------
+  # Comentários
+  # -------------------------
+  /comments:
+    post:
+      tags: [Comentários]
+      summary: Adiciona um comentário a um post
+      requestBody:
+        required: true
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/NewComment' } }
+      responses:
+        '201':
+          description: Comentário criado.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/Comment' } }
+  
+  /comments/{id}:
+    patch:
+      tags: [Comentários]
+      summary: Edita um comentário
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: { text: { type: string } }
+      responses:
+        '200':
+          description: Comentário atualizado.
+    delete:
+      tags: [Comentários]
+      summary: Deleta um comentário
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses:
+        '204':
+          description: Comentário deletado.
+
+  # -------------------------
+  # Sub-Comentários
+  # -------------------------
+  /subComments:
+    post:
+      tags: [Sub-Comentários]
+      summary: Adiciona uma resposta a um comentário
+      requestBody:
+        required: true
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/NewSubComment' } }
+      responses:
+        '201':
+          description: Resposta criada.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/SubComment' } }
+            
+  /subComments/{id}:
+    delete:
+      tags: [Sub-Comentários]
+      summary: Deleta uma resposta
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses:
+        '204':
+          description: Resposta deletada.
+
+  # -------------------------
+  # Interações
+  # -------------------------
+  /likes:
+    post:
+      tags: [Interações]
+      summary: Curte um post
+      requestBody:
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/NewLike' } }
+      responses:
+        '201':
+          description: Post curtido.
+
+  /likes/{id}:
+    delete:
+      tags: [Interações]
+      summary: Remove a curtida de um post
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses:
+        '204':
+          description: Curtida removida.
+
+  /retweets:
+    post:
+      tags: [Interações]
+      summary: Retweeta um post
+      requestBody:
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/NewRetweet' } }
+      responses:
+        '201':
+          description: Post retweetado.
+
+  /commentLikes:
+    post:
+      tags: [Interações]
+      summary: Curte um comentário
+      requestBody:
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/NewCommentLike' } }
+      responses:
+        '201':
+          description: Comentário curtido.
+
+  /commentLikes/{id}:
+    delete:
+      tags: [Interações]
+      summary: Remove a curtida de um comentário
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses:
+        '204':
+          description: Curtida removida.
+
+  /commentRetweets:
+    post:
+      tags: [Interações]
+      summary: Retweeta um comentário
+      requestBody:
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/NewCommentRetweet' } }
+      responses:
+        '201':
+          description: Comentário retweetado.
+  
+  /subCommentLikes:
+    post:
+      tags: [Interações]
+      summary: Curte uma resposta
+      requestBody:
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/NewSubCommentLike' } }
+      responses:
+        '201':
+          description: Resposta curtida.
+  
+  /subCommentLikes/{id}:
+    delete:
+      tags: [Interações]
+      summary: Remove a curtida de uma resposta
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses:
+        '204':
+          description: Curtida de resposta removida.
+
+  /subCommentRetweets:
+    post:
+      tags: [Interações]
+      summary: Retweeta uma resposta
+      requestBody:
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/NewSubCommentRetweet' } }
+      responses:
+        '201':
+          description: Resposta retweetada.
+
+components:
+  schemas:
+    # ------------- Modelos Base -------------
+    User:
+      type: object
+      properties: { id: { type: integer }, username: { type: string } }
+    
+    Post:
+      allOf:
+        - $ref: '#/components/schemas/NewPost'
+        - type: object
+          properties:
+            id: { type: integer }
+            createdAt: { type: integer, format: int64 }
+            likes: { type: array, items: {} }
+            retweets: { type: array, items: {} }
+            comments: { type: array, items: {} }
+            
+    Comment:
+      allOf:
+        - $ref: '#/components/schemas/NewComment'
+        - type: object
+          properties: { id: { type: integer }, createdAt: { type: integer, format: int64 } }
+
+    SubComment:
+      allOf:
+        - $ref: '#/components/schemas/NewSubComment'
+        - type: object
+          properties: { id: { type: integer }, createdAt: { type: integer, format: int64 } }
+
+    # ------------- Modelos para Criação (Request Bodies) -------------
+    NewPost:
+      type: object
+      properties:
+        userId: { type: integer }
+        content: { type: string }
+        mediaUrl: { type: string }
+        mediaType: { type: string, enum: [image, video] }
+
+    NewComment:
+      type: object
+      properties:
+        postId: { type: integer }
+        userId: { type: integer }
+        text: { type: string }
+        mediaUrl: { type: string }
+        mediaType: { type: string, enum: [image, video] }
+
+    NewSubComment:
+      type: object
+      properties:
+        parentCommentId: { type: integer }
+        userId: { type: integer }
+        text: { type: string }
+        mediaUrl: { type: string }
+        mediaType: { type: string, enum: [image, video] }
+
+    NewLike:
+      type: object
+      properties: { postId: { type: integer }, userId: { type: integer } }
+      
+    NewRetweet:
+      type: object
+      properties: { postId: { type: integer }, userId: { type: integer } }
+
+    NewCommentLike:
+      type: object
+      properties: { commentId: { type: integer }, userId: { type: integer } }
+
+    NewCommentRetweet:
+      type: object
+      properties: { commentId: { type: integer }, userId: { type: integer } }
+
+    NewSubCommentLike:
+      type: object
+      properties: { subCommentId: { type: integer }, userId: { type: integer } }
+
+    NewSubCommentRetweet:
+      type: object
+      properties: { subCommentId: { type: integer }, userId: { type: integer } }
