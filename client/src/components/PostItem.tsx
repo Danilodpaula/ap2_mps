@@ -116,20 +116,25 @@ export const PostItem = ({
       ) : (
         <p>{p.content}</p>
       )}
-      {p.mediaUrl && p.mediaType === "image" && (
-        <img
-          src={p.mediaUrl}
-          alt="Post media"
-          style={{ maxWidth: "100%", borderRadius: "8px" }}
-        />
-      )}
-      {p.mediaUrl && p.mediaType === "video" && (
-        <video
-          src={p.mediaUrl}
-          controls
-          style={{ maxWidth: "100%", borderRadius: "8px" }}
-        />
-      )}
+      {p.mediaUrl &&
+        (() => {
+          const mediaSrc = import.meta.env.PROD
+            ? `<span class="math-inline">\{import\.meta\.env\.VITE\_API\_URL\}</span>{p.mediaUrl}`
+            : p.mediaUrl;
+          return p.mediaType === "image" ? (
+            <img
+              src={mediaSrc}
+              alt="Post media"
+              style={{ maxWidth: "100%", borderRadius: "8px" }}
+            />
+          ) : (
+            <video
+              src={mediaSrc}
+              controls
+              style={{ maxWidth: "100%", borderRadius: "8px" }}
+            />
+          );
+        })()}
       <footer>
         <button
           className={p.likes?.some((l) => l.userId === user?.id) ? "liked" : ""}
@@ -150,7 +155,7 @@ export const PostItem = ({
         </button>
       </footer>
       {/* Formulário para novo comentário, que aparece condicionalmente */}
-      
+
       {showCommentBox && (
         <PublishBox
           placeholder="Escreva seu comentário..."
