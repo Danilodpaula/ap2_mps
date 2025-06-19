@@ -12,7 +12,7 @@ const LoginPage = () => {
   const nav = useNavigate();
 
   // Crie um estado para armazenar o áudio
-  const [audio] = useState(new Audio("./../../public/a-risada-que-todos-mains-adcs-temem-bmccqfglzbk_h8i9o46j.mp3")); // Defina o caminho do áudio
+  const [audio] = useState(new Audio("/a-risada-que-todos-mains-adcs-temem-bmccqfglzbk_h8i9o46j.mp3")); // Defina o caminho do áudio
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
